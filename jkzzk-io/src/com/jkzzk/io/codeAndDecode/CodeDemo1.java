@@ -7,8 +7,8 @@ import java.io.OutputStreamWriter;
 
 /**
  *  java.io.OutputStreamWriter extends Writer
- *      OutputStreamWriter：是字符的桥梁流以字节流：向其写入的字符编码成使用指定的字节charset 。 它使用的字符集可以由名称指定，也可以被明确指定，或者可以接受平台的默认字符集。
- *          其实就是编码过程
+ *      OutputStreamWriter：是字符流和字节流之间的桥梁，它写入字节，并使用指定的charset将其编码为字符，
+ *                          使用的字符集可以由名称指定，也可以被明确指定，或者可以接受平台的默认字符集，其实就是编码过程
  *      继承自父类的共性成员方法：
  *          void write(int c) 写一个字符
  *          void write(char[] cbuf) 写入一个字符数组

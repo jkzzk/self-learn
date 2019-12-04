@@ -4,7 +4,7 @@ import java.io.*;
 
 /**
  *  java.io.InputStreamReader extends Reader
- *      InputStreamReader：是字符流和字节流之间的桥梁，它读取字节，并使用指定的charset将其编码为字符
+ *      InputStreamReader：是字符流和字节流之间的桥梁，它读取字节，并使用指定的charset将其解码为字符
  *                         使用的字符集可以由名称指定，也可以被明确指定，或者可以接受平台的默认字符集，其实就是编码过程
  *      继承自父类的共性成员方法：
  *          1.int read()  读取单个字符，并返回

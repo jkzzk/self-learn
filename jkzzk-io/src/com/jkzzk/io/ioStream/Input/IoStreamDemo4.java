@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
- *      java.io.InputStream：字节输出流
+ *      java.io.InputStream：字节输入流
  *          这个抽象类是表示输入字节流的所有类的超类
  *      定义了所有子类的共性方法：
  *          public void close(); 关闭此输入流并释放与流相关联的任何系统资源

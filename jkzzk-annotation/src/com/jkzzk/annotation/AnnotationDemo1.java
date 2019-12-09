@@ -1,5 +1,9 @@
 package com.jkzzk.annotation;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.stream.Stream;
+
 /**
  *  注解：
  *      概念：说明程序的，给计算机看的
@@ -53,14 +57,23 @@ package com.jkzzk.annotation;
 @SuppressWarnings("all")
 public class AnnotationDemo1 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-
+        show01();
 
     }
 
-    @MyAnnotation(age = 20)
-    public void show01() {
+    @MyAnnotation(add = 20)
+    public static void show01() throws Exception {
+
+        Class<AnnotationDemo1> annotationDemo1Class = (Class<AnnotationDemo1>) Class.forName("com.jkzzk.annotation.AnnotationDemo1");
+        Class<MyAnnotation> myAnnotationClass = MyAnnotation.class;
+
+        Method show01 = annotationDemo1Class.getMethod("show01");
+
+        MyAnnotation annotation = show01.getAnnotation(myAnnotationClass);
+
+        System.out.println(annotation.add());
 
     }
 

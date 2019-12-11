@@ -101,7 +101,15 @@ import java.sql.*;
  */
 public class JdbcDemo1 {
 
-    public boolean flag = false;
+    public int flag = 0;
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -117,32 +125,66 @@ public class JdbcDemo1 {
             }
         }).start();*/
 
-/*        new Thread(() -> {
-            try {
+        JdbcDemo1 jdbcDemo1 = new JdbcDemo1();
+
+        new Thread(() -> {
+            synchronized (jdbcDemo1) {
+                System.out.println(Thread.currentThread().getName());
                 JdbcDemo1.show02(url, user, password);
-                System.out.println(Thread.currentThread().getName());
-                Thread.sleep(10000);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                jdbcDemo1.setFlag(1);
+                jdbcDemo1.notify();
             }
-        }).start();*/
+        }).start();
 
-/*        Thread thread3 = new Thread(() -> {
-            System.out.println(Thread.currentThread().getName());
-            JdbcDemo1.show03();
-        });*/
+        new Thread(() -> {
+            while(true) {
+                synchronized (jdbcDemo1) {
 
-/*        Thread thread4 = new Thread(() -> {
-                System.out.println(Thread.currentThread().getName());
-                JdbcDemo1.show04(url,user,password);
-        });*/
+                    if (jdbcDemo1.getFlag() == 1) {
+
+                        System.out.println(Thread.currentThread().getName());
+                        JdbcDemo1.show03();
+                        jdbcDemo1.setFlag(2);
+                        jdbcDemo1.notify();
+                        //停止线程
+                        Thread.currentThread().stop();
+                    }else {
+                        try {
+                            jdbcDemo1.notify();
+                            jdbcDemo1.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            while(true) {
+                synchronized (jdbcDemo1) {
+                    if (jdbcDemo1.getFlag() == 2) {
+                        System.out.println(Thread.currentThread().getName());
+                        JdbcDemo1.show04(url, user, password);
+                        //停止线程
+                        Thread.currentThread().stop();
+                    } else {
+                        try {
+                            jdbcDemo1.notify();
+                            jdbcDemo1.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
 
 //        show05(url,user,password);
 
 //        show06(url,user,password);
 
-        show07(url,user,password);
+//        show07(url,user,password);
     }
 
     private static void show07(String url, String user, String password) throws SQLException {

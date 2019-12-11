@@ -170,10 +170,15 @@ public class JdbcDemo1 {
                 statement.close();
             }
         }
-
-
     }
 
+    /**
+     * 实现select语句，并遍历resultSet语句
+     * @param url
+     * @param user
+     * @param password
+     * @throws Exception
+     */
     private static void show06(String url, String user, String password) throws Exception {
         Connection connection = DriverManager.getConnection(url,user,password);
         Statement statement = connection.createStatement();

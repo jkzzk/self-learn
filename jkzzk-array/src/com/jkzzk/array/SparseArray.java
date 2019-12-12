@@ -1,5 +1,6 @@
 package com.jkzzk.array;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -18,7 +19,9 @@ import java.util.stream.Stream;
  *          1.读取稀疏数组的第一行，创建原始数组
  *          2.遍历稀疏数组的其他数据，将其赋值给原始数组的相应位置
  */
-public class SparseArray{
+public class SparseArray implements Serializable {
+
+    public static final long serialVersionUID = 1L;
 
     /**
      * 稀疏数组

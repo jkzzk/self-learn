@@ -1,4 +1,4 @@
-package com.jkzzk.test.array;
+package com.jkzzk.array;
 
 /**
  * 稀疏数组类

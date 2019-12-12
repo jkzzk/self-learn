@@ -1,7 +1,7 @@
 package com.jkzzk.test;
 
-import com.jkzzk.test.array.SparseArray;
-import com.jkzzk.test.array.SparseArrayException;
+import com.jkzzk.array.SparseArray;
+import com.jkzzk.array.SparseArrayException;
 import org.junit.Test;
 
 import java.util.Arrays;

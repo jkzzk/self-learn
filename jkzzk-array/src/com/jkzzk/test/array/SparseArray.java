@@ -1,4 +1,4 @@
-package com.jkzzk.array;
+package com.jkzzk.test.array;
 
 import java.util.Arrays;
 import java.util.stream.Stream;

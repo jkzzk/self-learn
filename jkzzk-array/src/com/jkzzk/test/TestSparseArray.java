@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 /**
  *  测试类
  */
-public class test {
+public class TestSparseArray {
 
     @Test
     public void getSparseArrayTest() {

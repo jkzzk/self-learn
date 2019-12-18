@@ -2,6 +2,7 @@ package com.jkzzk.test;
 
 import com.jkzzk.queue.ArrayQueue;
 import com.jkzzk.queue.ArrayQueueException;
+import com.jkzzk.queue.ArrayRingQueue;
 import org.junit.Test;
 
 /**
@@ -46,6 +47,44 @@ public class TestArrayQueue {
         }
 
         stringArrayQueue.clear();
+    }
+
+    @Test
+    public void testUseArraRingQueue() throws ArrayQueueException {
+
+        ArrayRingQueue<Integer> integerArrayRingQueue = new ArrayRingQueue<>();
+
+        for (int i = 0; i < 10; i++) {
+            integerArrayRingQueue.enQueue(i);
+        }
+
+        Integer outOne = integerArrayRingQueue.deQueue();
+
+        System.out.println(outOne);
+
+        integerArrayRingQueue.enQueue(10);
+
+        integerArrayRingQueue.printQueue();
+        integerArrayRingQueue.printQueueOrder();
+
+        Integer outTwo = integerArrayRingQueue.deQueue();
+
+        System.out.println(outTwo);
+
+        integerArrayRingQueue.enQueue(10);
+
+        integerArrayRingQueue.printQueue();
+        integerArrayRingQueue.printQueueOrder();
+
+        Integer outThree = integerArrayRingQueue.deQueue();
+
+        System.out.println(outThree);
+
+        integerArrayRingQueue.enQueue(10);
+
+        integerArrayRingQueue.printQueue();
+        integerArrayRingQueue.printQueueOrder();
+
     }
 
 }

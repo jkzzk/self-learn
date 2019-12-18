@@ -113,6 +113,14 @@ public class ArrayQueue<T> {
         this.size = 0;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
     public void printQueue() {
         if(isEmpty()) {
             System.out.println("队列为空!");

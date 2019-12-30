@@ -355,6 +355,13 @@ public class JdbcDemo1 {
         String sql = "update party_member_student set is_party_member = 0 where id = \"83644737042513920\"";
         //5.获取执行sql语句的对象，Statement
         Statement statement = connection.createStatement();
+/*
+        String sql1 = "update party_member_student set is_party_member = ? where id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql1);
+        preparedStatement.setInt(1,0);
+        preparedStatement.setString(2,"123456789");
+*/
+
         //6.执行sql
         int i = statement.executeUpdate(sql);
         //8.处理结果

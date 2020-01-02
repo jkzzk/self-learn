@@ -1,5 +1,7 @@
 package com.jkzzk.linked;
 
+import java.util.Comparator;
+
 /**
  * 链表
  *      特点：有序可重复
@@ -44,6 +46,26 @@ public class LinkedList<T> {
         length++;
     }
 
+    public void addSort(T obj,boolean order) {
+        Node<T> node = new Node<>();
+        node.setObj(obj);
+        node.setNext(null);
+
+        if(length == 0) {
+            firstNode = node;
+        }else {
+            if(firstNode.compareTo(node) >= 0 && order) {
+                this.add(obj);
+            }else {
+                this.insert(this.length-1,obj);
+            }
+            lastNode.setNext(node);
+        }
+
+        lastNode = node;
+        length++;
+    }
+
     /**
      * 按照索引查找
      * @param index 查找索引
@@ -66,6 +88,25 @@ public class LinkedList<T> {
             }
             return new Node<T>(tempNode);
         }
+    }
+
+    /**
+     * 查找给定值在链表中的索引
+     * @param obj 任意值
+     * @return index 返回索引值
+     */
+    public int get(T obj) {
+        Node<T> tempNode = this.firstNode;
+        int count = 1;
+        while(tempNode != null) {
+            if(tempNode.getObj().equals(obj)) {
+                return count;
+            }
+            tempNode = tempNode.getNext();
+            count++;
+        }
+
+        return -1;
     }
 
 
@@ -119,6 +160,17 @@ public class LinkedList<T> {
         return currentNode;
     }
 
+    public Node<T> remove(T obj) {
+
+        int index = this.get(obj);
+
+        if(index == -1) {
+            return null;
+        }
+
+        return this.remove(index);
+    }
+
     /**
      * 按索引修改指定索引位置的元素节点值
      * @param index 查找索引
@@ -144,6 +196,57 @@ public class LinkedList<T> {
         }
 
         return retObj;
+    }
+
+    /**
+     * 替换指定索引元素的值
+     * @param index 索引
+     * @param obj 替换值
+     * @return Object 被替换值
+     */
+    public T replace(int index, T obj) {
+        if(checkIndex(index)) {
+            return null;
+        }
+
+        Node<T> tmpNode = this.innerGet(index);
+
+        if(tmpNode == null) {
+            return null;
+        }else {
+            T tmpObj = tmpNode.getObj();
+            tmpNode.setObj(obj);
+            return tmpObj;
+        }
+    }
+
+    /**
+     * 插入指定索引元素的值
+     * @param index 索引
+     * @param obj 插入值
+     * @return boolean 插入是否成功
+     */
+    public boolean insert(int index, T obj) {
+        if(checkIndex(index)) {
+            return false;
+        }
+
+        Node<T> tmpNode = new Node<>(obj,null);
+
+        if(index == 1) {
+            tmpNode.setNext(this.firstNode.getNext());
+            this.firstNode = tmpNode;
+        }else if (index == this.length){
+            this.lastNode.setNext(tmpNode);
+            this.lastNode = tmpNode;
+        }else {
+            Node<T> currentNode = this.innerGet(index);
+            tmpNode.setNext(currentNode.getNext());
+            currentNode.setNext(tmpNode);
+        }
+
+        this.length++;
+        return true;
     }
 
     private boolean checkIndex(int index) {

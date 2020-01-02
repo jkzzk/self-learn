@@ -40,6 +40,8 @@ public class LinkedListTest {
         }
 
         Node<String> stringNode = stringLinkedList.get(10);
+        int index = stringLinkedList.get("20");
+        System.out.println(index);
 
         if(stringNode != null) {
             System.out.println(stringNode.getObj());
@@ -58,10 +60,14 @@ public class LinkedListTest {
             stringLinkedList.add(i+"");
         }
 
-        System.out.println("length = " + stringLinkedList.getLength());
+/*        System.out.println("length = " + stringLinkedList.getLength());
         System.out.println(stringLinkedList.remove(stringLinkedList.getLength()).getObj());
         System.out.println("length = " + stringLinkedList.getLength());
-        System.out.println(stringLinkedList.get(stringLinkedList.getLength()).getObj());
+        System.out.println(stringLinkedList.get(stringLinkedList.getLength()).getObj());*/
+
+        System.out.println("length = " + stringLinkedList.getLength());
+        System.out.println(stringLinkedList.remove("20"));
+        System.out.println("length = " + stringLinkedList.getLength());
     }
 
     @Test
@@ -73,6 +79,19 @@ public class LinkedListTest {
 
         System.out.println(stringLinkedList.modify(stringLinkedList.getLength(),"100"));
         System.out.println(stringLinkedList.get(stringLinkedList.getLength()).getObj());
+    }
+
+    @Test
+    public void TestAddSort() {
+        for(int i = 10; i > 0; i--) {
+            stringLinkedList.addSort(i+"",true);
+        }
+
+        Node<String> next = stringLinkedList.getFirstNode();
+        while(next != null) {
+            System.out.println(next.getObj());
+            next = next.getNext();
+        }
     }
 
     @After

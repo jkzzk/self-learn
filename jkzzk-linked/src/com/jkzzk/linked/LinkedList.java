@@ -12,7 +12,7 @@ import java.util.Comparator;
  *              数据域：存储数据
  *              next域：存放下一个节点的位置
  */
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
 
     private Node<T> firstNode;
 
@@ -26,44 +26,65 @@ public class LinkedList<T> {
         length = 0;
     }
 
+    public void addFirst(T obj) {
+        if(length == 0) {
+            Node<T> node = new Node<>();
+            node.setObj(obj);
+            node.setNext(null);
+            firstNode = node;
+            lastNode = node;
+            length++;
+        }else {
+            this.insertBefore(1,obj);
+        }
+    }
+
+    public void addLast(T obj) {
+        Node<T> node = new Node<>();
+        node.setObj(obj);
+        node.setNext(null);
+
+        lastNode.setNext(node);
+        lastNode = node;
+        length++;
+    }
+
     /**
      * 直接在随后面添加一个节点元素
      * @param obj 添加元素
      * @return void
      */
     public void add(T obj) {
-        Node<T> node = new Node<>();
-        node.setObj(obj);
-        node.setNext(null);
-
         if(length == 0) {
-            firstNode = node;
+            this.addFirst(obj);
         }else {
-            lastNode.setNext(node);
+            this.addLast(obj);
         }
-
-        lastNode = node;
-        length++;
     }
 
-    public void addSort(T obj,boolean order) {
-        Node<T> node = new Node<>();
-        node.setObj(obj);
-        node.setNext(null);
+    public void addSort(T obj) {
 
         if(length == 0) {
-            firstNode = node;
+            this.addFirst(obj);
         }else {
-            if(firstNode.compareTo(node) >= 0 && order) {
-                this.add(obj);
-            }else {
-                this.insert(this.length-1,obj);
+            Node<T> tmpNode = this.firstNode;
+            boolean flag = false;
+            while(true) {
+                if(null == tmpNode) {
+                    flag = true;
+                    break;
+                }
+                if(tmpNode.getObj().compareTo(obj) > 0) {
+                    this.insertBefore(this.get(tmpNode.getObj()),obj);
+                    break;
+                }
+                tmpNode = tmpNode.getNext();
             }
-            lastNode.setNext(node);
-        }
 
-        lastNode = node;
-        length++;
+            if(flag) {
+                this.addLast(obj);
+            }
+        }
     }
 
     /**
@@ -221,12 +242,38 @@ public class LinkedList<T> {
     }
 
     /**
-     * 插入指定索引元素的值
+     * 向后插入指定索引元素的值
      * @param index 索引
      * @param obj 插入值
      * @return boolean 插入是否成功
      */
-    public boolean insert(int index, T obj) {
+    public boolean insertAfter(int index, T obj) {
+        if(checkIndex(index)) {
+            return false;
+        }
+
+        Node<T> tmpNode = new Node<>(obj,null);
+
+        if (index == this.length){
+            this.lastNode.setNext(tmpNode);
+            this.lastNode = tmpNode;
+        }else {
+            Node<T> currentNode = this.innerGet(index);
+            tmpNode.setNext(currentNode.getNext());
+            currentNode.setNext(tmpNode);
+        }
+
+        this.length++;
+        return true;
+    }
+
+    /**
+     * 向前插入指定索引元素的值
+     * @param index 索引
+     * @param obj 插入值
+     * @return boolean 插入是否成功
+     */
+    public boolean insertBefore(int index, T obj) {
         if(checkIndex(index)) {
             return false;
         }
@@ -234,15 +281,12 @@ public class LinkedList<T> {
         Node<T> tmpNode = new Node<>(obj,null);
 
         if(index == 1) {
-            tmpNode.setNext(this.firstNode.getNext());
+            tmpNode.setNext(this.firstNode);
             this.firstNode = tmpNode;
-        }else if (index == this.length){
-            this.lastNode.setNext(tmpNode);
-            this.lastNode = tmpNode;
         }else {
-            Node<T> currentNode = this.innerGet(index);
-            tmpNode.setNext(currentNode.getNext());
-            currentNode.setNext(tmpNode);
+            Node<T> beforeNode = this.innerGet(index-1);
+            tmpNode.setNext(beforeNode.getNext());
+            beforeNode.setNext(tmpNode);
         }
 
         this.length++;

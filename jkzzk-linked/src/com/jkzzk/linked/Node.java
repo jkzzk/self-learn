@@ -1,6 +1,6 @@
 package com.jkzzk.linked;
 
-public class Node<T> implements Comparable<Node<T>>{
+public class Node<T>{
 
     // 数据
     private T obj;
@@ -35,10 +35,5 @@ public class Node<T> implements Comparable<Node<T>>{
 
     public void setNext(Node<T> next) {
         this.next = next;
-    }
-
-    @Override
-    public int compareTo(Node<T> o) {
-        return this.obj.hashCode() - o.getObj().hashCode();
     }
 }

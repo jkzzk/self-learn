@@ -60,20 +60,33 @@ public class LinkedListExercises {
     @Test
     public void TestThree() {
         LinkedList<Integer> integerLinkedList = new LinkedList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             integerLinkedList.add(i);
         }
 
-        for(int i = 1; i < integerLinkedList.getLength(); i++) {
-            integerLinkedList.insertBefore(i, integerLinkedList.getLastNode().getObj());
-            integerLinkedList.remove(integerLinkedList.getLength());
-        }
+        System.out.println("add finish！！");
+
+        Long startTime = System.currentTimeMillis();
+
+//        for(int i = 1; i < integerLinkedList.getLength(); i++) {
+//            integerLinkedList.insertBefore(i, integerLinkedList.getLastNode().getObj());
+//            integerLinkedList.remove(integerLinkedList.getLength());
+//        }
+
+        integerLinkedList.reverse();
+
+        Long endTime = System.currentTimeMillis();
+
+        System.out.println(endTime - startTime);
 
         Node<Integer> next = integerLinkedList.getFirstNode();
-        while(next != null) {
-            System.out.println(next.getObj());
-            next = next.getNext();
-        }
+        System.out.println(next.getObj());
+        next = next.getNext();
+        System.out.println(next.getObj());
+//        while(next != null) {
+//            System.out.println(next.getObj());
+//            next = next.getNext();
+//        }
     }
 
 

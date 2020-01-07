@@ -293,6 +293,27 @@ public class LinkedList<T extends Comparable<T>> {
         return true;
     }
 
+    /**
+     * 反转链表
+     */
+    public void reverse() {
+
+        if(this.length == 0 || this.length == 1) {
+            return ;
+        }
+
+        Node<T> tmpNode = this.firstNode.getNext();
+        Node<T> tmpNodeS = null;
+        this.firstNode.setNext(null);
+        this.lastNode = this.firstNode;
+        while(tmpNode != null) {
+            tmpNodeS = tmpNode.getNext();
+            tmpNode.setNext(this.firstNode);
+            this.firstNode = tmpNode;
+            tmpNode = tmpNodeS;
+        }
+    }
+
     private boolean checkIndex(int index) {
         return index < 0 || index > this.length;
     }

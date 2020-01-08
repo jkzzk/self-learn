@@ -8,12 +8,21 @@ public class Node<T>{
     // 指向下一个节点
     private Node<T> next;
 
+    //只想前一个节点
+    private Node<T> pre;
+
     public Node() {
     }
 
     public Node(T obj, Node<T> next) {
         this.obj = obj;
         this.next = next;
+    }
+
+    public Node(T obj, Node<T> next, Node<T> pre) {
+        this.obj = obj;
+        this.next = next;
+        this.pre = pre;
     }
 
     public Node(Node<T> _node) {
@@ -35,5 +44,13 @@ public class Node<T>{
 
     public void setNext(Node<T> next) {
         this.next = next;
+    }
+
+    public Node<T> getPre() {
+        return pre;
+    }
+
+    public void setPre(Node<T> pre) {
+        this.pre = pre;
     }
 }

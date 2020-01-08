@@ -80,13 +80,10 @@ public class LinkedListExercises {
         System.out.println(endTime - startTime);
 
         Node<Integer> next = integerLinkedList.getFirstNode();
-        System.out.println(next.getObj());
-        next = next.getNext();
-        System.out.println(next.getObj());
-//        while(next != null) {
-//            System.out.println(next.getObj());
-//            next = next.getNext();
-//        }
+        while(next != null) {
+            System.out.println(next.getObj());
+            next = next.getNext();
+        }
     }
 
 

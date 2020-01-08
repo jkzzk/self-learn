@@ -41,7 +41,7 @@ public class LinkedListTest {
         }
 
         Node<String> stringNode = stringLinkedList.get(10);
-        int index = stringLinkedList.get("20");
+        int index = stringLinkedList.getByObj("20");
         System.out.println(index);
 
         if(stringNode != null) {

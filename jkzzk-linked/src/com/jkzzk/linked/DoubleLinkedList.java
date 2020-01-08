@@ -1,18 +1,9 @@
 package com.jkzzk.linked;
 
-import java.util.Comparator;
-
 /**
- * 链表
- *      特点：有序可重复
- *      内存：不是连续的存储地址
- *      结构：
- *          1.以节点为存储单元
- *          2.节点有数据域和next域
- *              数据域：存储数据
- *              next域：存放下一个节点的位置
+ * 双向链表
  */
-public class LinkedList<T extends Comparable<T>> {
+public class DoubleLinkedList<T extends Comparable<T>> {
 
     private Node<T> firstNode;
 
@@ -20,7 +11,7 @@ public class LinkedList<T extends Comparable<T>> {
 
     private int length;
 
-    public LinkedList() {
+    public DoubleLinkedList() {
         firstNode = null;
         lastNode = null;
         length = 0;
@@ -31,6 +22,7 @@ public class LinkedList<T extends Comparable<T>> {
             Node<T> node = new Node<>();
             node.setObj(obj);
             node.setNext(null);
+            node.setPre(null);
             firstNode = node;
             lastNode = node;
             length++;
@@ -45,12 +37,13 @@ public class LinkedList<T extends Comparable<T>> {
         node.setNext(null);
 
         lastNode.setNext(node);
+        node.setPre(lastNode);
         lastNode = node;
         length++;
     }
 
     /**
-     * 直接在随后面添加一个节点元素
+     * 直接在后面添加一个节点元素
      * @param obj 添加元素
      * @return void
      */
@@ -62,6 +55,10 @@ public class LinkedList<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * 按顺序插入
+     * @param obj 添加的数据
+     */
     public void addSort(T obj) {
 
         if(length == 0) {
@@ -103,11 +100,19 @@ public class LinkedList<T extends Comparable<T>> {
         }else if(index == this.length) {
             return new Node<T>(this.lastNode);
         }else {
-            Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
-                tempNode = tempNode.getNext();
+            if(index < this.length >> 1) {
+                Node<T> nextNode = this.firstNode;
+                for(int i = 1; i < index; i++) {
+                    nextNode = nextNode.getNext();
+                }
+                return new Node<T>(nextNode);
+            }else {
+                Node<T> preNode = this.lastNode;
+                for (int i = 0; i < index; i++) {
+                    preNode = preNode.getPre();
+                }
+                return new Node<T>(preNode);
             }
-            return new Node<T>(tempNode);
         }
     }
 
@@ -130,7 +135,6 @@ public class LinkedList<T extends Comparable<T>> {
         return -1;
     }
 
-
     private Node<T> innerGet(int index) {
 
         if(checkIndex(index)) {
@@ -142,11 +146,19 @@ public class LinkedList<T extends Comparable<T>> {
         }else if(index == this.length) {
             return this.lastNode;
         }else {
-            Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
-                tempNode = tempNode.getNext();
+            if(index < this.length >> 1) {
+                Node<T> nextNode = this.firstNode;
+                for(int i = 1; i < index; i++) {
+                    nextNode = nextNode.getNext();
+                }
+                return nextNode;
+            }else {
+                Node<T> preNode = this.lastNode;
+                for (int i = 0; i < index; i++) {
+                    preNode = preNode.getPre();
+                }
+                return preNode;
             }
-            return tempNode;
         }
     }
 
@@ -165,15 +177,19 @@ public class LinkedList<T extends Comparable<T>> {
         if (index == 1) {
             currentNode = this.firstNode;
             this.firstNode = this.firstNode.getNext();
+            this.firstNode.setPre(null);
             currentNode.setNext(null);
         } else if (index == this.length) {
             currentNode = this.lastNode;
-            this.lastNode = this.innerGet(this.length - 1);
+            this.lastNode = this.lastNode.getPre();
+            currentNode.setPre(null);
             this.lastNode.setNext(null);
         } else {
-            Node<T> beforeNode = this.get(index -1);
+            //删除不同
             currentNode = this.innerGet(index);
-            beforeNode.setNext(currentNode.getNext());
+            currentNode.getPre().setNext(currentNode.getNext());
+            currentNode.getNext().setPre(currentNode.getPre());
+            currentNode.setPre(null);
             currentNode.setNext(null);
         }
 
@@ -252,14 +268,17 @@ public class LinkedList<T extends Comparable<T>> {
             return false;
         }
 
-        Node<T> tmpNode = new Node<>(obj,null);
+        Node<T> tmpNode = new Node<>(obj,null,null);
 
         if (index == this.length){
+            tmpNode.setPre(this.lastNode);
             this.lastNode.setNext(tmpNode);
             this.lastNode = tmpNode;
         }else {
             Node<T> currentNode = this.innerGet(index);
+            tmpNode.setPre(currentNode);
             tmpNode.setNext(currentNode.getNext());
+            currentNode.getNext().setPre(tmpNode);
             currentNode.setNext(tmpNode);
         }
 
@@ -278,15 +297,18 @@ public class LinkedList<T extends Comparable<T>> {
             return false;
         }
 
-        Node<T> tmpNode = new Node<>(obj,null);
+        Node<T> tmpNode = new Node<>(obj,null,null);
 
         if(index == 1) {
             tmpNode.setNext(this.firstNode);
+            this.firstNode.setPre(tmpNode);
             this.firstNode = tmpNode;
         }else {
-            Node<T> beforeNode = this.innerGet(index-1);
-            tmpNode.setNext(beforeNode.getNext());
-            beforeNode.setNext(tmpNode);
+            Node<T> currentNode = this.innerGet(index);
+            tmpNode.setPre(currentNode.getPre());
+            currentNode.getPre().setNext(tmpNode);
+            tmpNode.setNext(currentNode);
+            currentNode.setPre(tmpNode);
         }
 
         this.length++;
@@ -294,7 +316,7 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * 反转链表
+     * 反转双向链表
      */
     public void reverse() {
 
@@ -302,22 +324,23 @@ public class LinkedList<T extends Comparable<T>> {
             return ;
         }
 
-        Node<T> tmpNode = this.firstNode.getNext();
-        Node<T> tmpNodeS = null;
-        this.firstNode.setNext(null);
-        this.lastNode = this.firstNode;
+        Node<T> tmpNode = this.firstNode;
+
+        Node<T> tNode = null;
         while(tmpNode != null) {
-            tmpNodeS = tmpNode.getNext();
-            tmpNode.setNext(this.firstNode);
-            this.firstNode = tmpNode;
-            tmpNode = tmpNodeS;
+            tNode = tmpNode.getNext();
+            tmpNode.setNext(tmpNode.getPre());
+            tmpNode.setPre(tNode);
+            tmpNode = tmpNode.getPre();
         }
+        tNode = this.firstNode;
+        this.firstNode = this.lastNode;
+        this.lastNode = tNode;
     }
 
     private boolean checkIndex(int index) {
         return index <= 0 || index > this.length;
     }
-
 
     public Node<T> getFirstNode() {
         return firstNode;

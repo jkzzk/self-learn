@@ -14,6 +14,10 @@ public class Node<T>{
     public Node() {
     }
 
+    public Node(T obj) {
+        this.obj = obj;
+    }
+
     public Node(T obj, Node<T> next) {
         this.obj = obj;
         this.next = next;

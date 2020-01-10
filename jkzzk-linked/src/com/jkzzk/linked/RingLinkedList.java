@@ -1,52 +1,40 @@
 package com.jkzzk.linked;
 
-import java.util.Comparator;
+import java.util.Optional;
 
 /**
- * 链表
- *      特点：有序可重复
- *      内存：不是连续的存储地址
- *      结构：
- *          1.以节点为存储单元
- *          2.节点有数据域和next域
- *              数据域：存储数据
- *              next域：存放下一个节点的位置
+ * 环形链表
  */
-public class LinkedList<T extends Comparable<T>> {
-
+public class RingLinkedList<T extends Comparable<T>> {
     private Node<T> firstNode;
 
     private Node<T> lastNode;
 
     private int length;
 
-    public LinkedList() {
+    public RingLinkedList() {
         firstNode = null;
-        lastNode = null;
         length = 0;
     }
 
     public void addFirst(T obj) {
-        if(length == 0) {
-            Node<T> node = new Node<>();
-            node.setObj(obj);
-            node.setNext(null);
-            firstNode = node;
-            lastNode = node;
-            length++;
-        }else {
-            this.insertBefore(1,obj);
-        }
+        Node<T> node = new Node<>();
+        node.setObj(obj);
+        node.setNext(node);
+
+        this.firstNode = node;
+        this.lastNode = node;
+        this.length++;
     }
 
     public void addLast(T obj) {
         Node<T> node = new Node<>();
         node.setObj(obj);
-        node.setNext(null);
+        node.setNext(this.firstNode);
 
-        lastNode.setNext(node);
-        lastNode = node;
-        length++;
+        this.lastNode.setNext(node);
+        this.lastNode = node;
+        this.length++;
     }
 
     /**
@@ -62,6 +50,10 @@ public class LinkedList<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * 按顺序添加
+     * @param obj 添加元素
+     */
     public void addSort(T obj) {
 
         if(length == 0) {
@@ -98,13 +90,15 @@ public class LinkedList<T extends Comparable<T>> {
             return null;
         }
 
+        index = index % this.length;
+
         if(index == 1) {
             return new Node<T>(this.firstNode);
-        }else if(index == this.length) {
+        }else if(index == 0) {
             return new Node<T>(this.lastNode);
         }else {
             Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
+            for(int i = 2; i <= index; i++) {
                 tempNode = tempNode.getNext();
             }
             return new Node<T>(tempNode);
@@ -118,18 +112,14 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public int getByObj(T obj) {
         Node<T> tempNode = this.firstNode;
-        int count = 1;
-        while(tempNode != null) {
+        for (int i = 1; i <= this.length; i++) {
             if(tempNode.getObj().equals(obj)) {
-                return count;
+                return i;
             }
             tempNode = tempNode.getNext();
-            count++;
         }
-
         return -1;
     }
-
 
     private Node<T> innerGet(int index) {
 
@@ -137,13 +127,15 @@ public class LinkedList<T extends Comparable<T>> {
             return null;
         }
 
+        index = index % this.length;
+
         if(index == 1) {
             return this.firstNode;
-        }else if(index == this.length) {
+        }else if(index == 0) {
             return this.lastNode;
         }else {
             Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
+            for(int i = 2; i <= index; i++) {
                 tempNode = tempNode.getNext();
             }
             return tempNode;
@@ -160,16 +152,21 @@ public class LinkedList<T extends Comparable<T>> {
             return null;
         }
 
+        index = index % this.length;
+
         Node<T> currentNode = null;
 
         if (index == 1) {
             currentNode = this.firstNode;
             this.firstNode = this.firstNode.getNext();
+            // 链表尾部重新指向链表头部
+            this.lastNode.setNext(this.firstNode);
             currentNode.setNext(null);
-        } else if (index == this.length) {
+        } else if (index == 0) {
             currentNode = this.lastNode;
             this.lastNode = this.innerGet(this.length - 1);
-            this.lastNode.setNext(null);
+            // 链表尾部重新指向链表头部
+            this.lastNode.setNext(this.firstNode);
         } else {
             Node<T> beforeNode = this.innerGet(index -1);
             currentNode = this.innerGet(index);
@@ -207,12 +204,14 @@ public class LinkedList<T extends Comparable<T>> {
             return null;
         }
 
+        index = index % this.length;
+
         T retObj = null;
 
         if (index == 1) {
             retObj = this.firstNode.getObj();
             this.firstNode.setObj(obj);
-        } else if (index == this.length) {
+        } else if (index == 0) {
             retObj = this.lastNode.getObj();
             this.lastNode.setObj(obj);
         } else {
@@ -227,23 +226,39 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * 替换指定索引元素的值
      * @param index 索引
-     * @param obj 替换值
+     * @param node 替换值
      * @return Object 被替换值
      */
-    public T replace(int index, T obj) {
+    public T replace(int index, Node<T> node) {
         if(checkIndex(index)) {
             return null;
         }
 
-        Node<T> tmpNode = this.innerGet(index);
+        index = index % this.length;
 
-        if(tmpNode == null) {
-            return null;
-        }else {
-            T tmpObj = tmpNode.getObj();
-            tmpNode.setObj(obj);
-            return tmpObj;
+        T retObj = null;
+
+        if (index == 1) {
+            retObj = this.firstNode.getObj();
+            node.setNext(this.firstNode.getNext());
+            this.lastNode.setNext(node);
+            this.firstNode = node;
+        } else if (index == 0) {
+            retObj = this.lastNode.getObj();
+            node.setNext(this.lastNode.getNext());
+            Node<T> tmpNode = this.innerGet(this.length - 1);
+            tmpNode.setNext(node);
+            this.lastNode = node;
+        } else {
+            Node<T> tmpNode = this.innerGet(index);
+            Node<T> beforeTmpNode = this.innerGet(index-1);
+            retObj = tmpNode.getObj();
+            beforeTmpNode.setNext(node);
+            node.setNext(tmpNode.getNext());
+            tmpNode.setNext(null);
         }
+
+        return retObj;
     }
 
     /**
@@ -257,10 +272,13 @@ public class LinkedList<T extends Comparable<T>> {
             return false;
         }
 
+        index = index % this.length;
+
         Node<T> tmpNode = new Node<>(obj,null);
 
-        if (index == this.length){
+        if(index == 0){
             this.lastNode.setNext(tmpNode);
+            tmpNode.setNext(this.firstNode);
             this.lastNode = tmpNode;
         }else {
             Node<T> currentNode = this.innerGet(index);
@@ -283,11 +301,20 @@ public class LinkedList<T extends Comparable<T>> {
             return false;
         }
 
+        index = index % this.length;
+
         Node<T> tmpNode = new Node<>(obj,null);
 
         if(index == 1) {
             tmpNode.setNext(this.firstNode);
+            this.lastNode.setNext(tmpNode);
             this.firstNode = tmpNode;
+        }else if(index == 0) {
+
+            Node<T> beforeNode = this.innerGet(this.length - 1);
+            tmpNode.setNext(beforeNode.getNext());
+            beforeNode.setNext(tmpNode);
+
         }else {
             Node<T> beforeNode = this.innerGet(index-1);
             tmpNode.setNext(beforeNode.getNext());
@@ -311,25 +338,21 @@ public class LinkedList<T extends Comparable<T>> {
         Node<T> tmpNodeS = null;
         this.firstNode.setNext(null);
         this.lastNode = this.firstNode;
-        while(tmpNode != null) {
+        for (int i = 0; i < this.length-1; i++) {
             tmpNodeS = tmpNode.getNext();
             tmpNode.setNext(this.firstNode);
             this.firstNode = tmpNode;
             tmpNode = tmpNodeS;
         }
+        this.lastNode.setNext(this.firstNode);
     }
 
     private boolean checkIndex(int index) {
-        return index <= 0 || index > this.length;
+        return index <= 0;
     }
-
 
     public Node<T> getFirstNode() {
         return firstNode;
-    }
-
-    public Node<T> getLastNode() {
-        return lastNode;
     }
 
     public int getLength() {

@@ -1,7 +1,5 @@
 package com.jkzzk.linked;
 
-import java.util.Optional;
-
 /**
  * 环形链表
  */
@@ -61,16 +59,18 @@ public class RingLinkedList<T extends Comparable<T>> {
         }else {
             Node<T> tmpNode = this.firstNode;
             boolean flag = false;
+            int count = 1;
             while(true) {
-                if(null == tmpNode) {
-                    flag = true;
-                    break;
-                }
-                if(tmpNode.getObj().compareTo(obj) > 0) {
+                if(tmpNode.getObj().compareTo(obj) >= 0) {
                     this.insertBefore(this.getByObj(tmpNode.getObj()),obj);
                     break;
                 }
+                if(this.length == count) {
+                    flag = true;
+                    break;
+                }
                 tmpNode = tmpNode.getNext();
+                count++;
             }
 
             if(flag) {
@@ -90,7 +90,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return null;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         if(index == 1) {
             return new Node<T>(this.firstNode);
@@ -127,7 +127,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return null;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         if(index == 1) {
             return this.firstNode;
@@ -152,7 +152,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return null;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         Node<T> currentNode = null;
 
@@ -204,7 +204,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return null;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         T retObj = null;
 
@@ -234,7 +234,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return null;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         T retObj = null;
 
@@ -272,7 +272,7 @@ public class RingLinkedList<T extends Comparable<T>> {
             return false;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
 
         Node<T> tmpNode = new Node<>(obj,null);
 
@@ -301,20 +301,18 @@ public class RingLinkedList<T extends Comparable<T>> {
             return false;
         }
 
-        index = index % this.length;
+        index = index <= this.length ? index : index % this.length;
+
+        if(index == 0) {
+            index = this.length;
+        }
 
         Node<T> tmpNode = new Node<>(obj,null);
 
-        if(index == 1) {
+        if(index == 1 || this.length == 1) {
             tmpNode.setNext(this.firstNode);
             this.lastNode.setNext(tmpNode);
             this.firstNode = tmpNode;
-        }else if(index == 0) {
-
-            Node<T> beforeNode = this.innerGet(this.length - 1);
-            tmpNode.setNext(beforeNode.getNext());
-            beforeNode.setNext(tmpNode);
-
         }else {
             Node<T> beforeNode = this.innerGet(index-1);
             tmpNode.setNext(beforeNode.getNext());

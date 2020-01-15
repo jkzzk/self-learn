@@ -104,7 +104,7 @@ public class LinkedList<T extends Comparable<T>> {
             return new Node<T>(this.lastNode);
         }else {
             Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
+            for(int i = 2; i <= index; i++) {
                 tempNode = tempNode.getNext();
             }
             return new Node<T>(tempNode);
@@ -227,21 +227,27 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * 替换指定索引元素的值
      * @param index 索引
-     * @param obj 替换值
+     * @param node 替换节点
      * @return Object 被替换值
      */
-    public T replace(int index, T obj) {
+    public T replace(int index, Node<T> node) {
         if(checkIndex(index)) {
             return null;
         }
 
         Node<T> tmpNode = this.innerGet(index);
+        Node<T> beforeNode = this.innerGet(index-1);
 
         if(tmpNode == null) {
             return null;
         }else {
             T tmpObj = tmpNode.getObj();
-            tmpNode.setObj(obj);
+
+            node.setNext(tmpNode.getNext());
+            beforeNode.setNext(node);
+
+            tmpNode.setNext(null);
+
             return tmpObj;
         }
     }

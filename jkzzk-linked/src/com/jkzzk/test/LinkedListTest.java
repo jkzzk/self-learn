@@ -6,6 +6,8 @@ import com.jkzzk.pojo.Person;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * 单链表的测试类
@@ -40,14 +42,9 @@ public class LinkedListTest {
             stringLinkedList.add(i+"");
         }
 
-        Node<String> stringNode = stringLinkedList.get(10);
-        int index = stringLinkedList.getByObj("20");
-        System.out.println(index);
+        Node<String> stringNode = stringLinkedList.get(6);
 
         if(stringNode != null) {
-            System.out.println(stringNode.getObj());
-            stringNode.setObj("100");
-            System.out.println(stringLinkedList.get(10).getObj());
             System.out.println(stringNode.getObj());
         }else {
             System.out.println("Error");
@@ -55,20 +52,47 @@ public class LinkedListTest {
     }
 
     @Test
-    public void TestRemove() {
+    public void testGetByObj() {
+        for(int i = 0; i < 10; i++) {
+            stringLinkedList.add(i+"");
+        }
 
+        int index = stringLinkedList.getByObj("10");
+
+        System.out.println(index);
+    }
+
+    @Test
+    public void TestRemove() {
         for(int i = 0; i < 10; i++) {
             stringLinkedList.add(i+"");
         }
 
         System.out.println("length = " + stringLinkedList.getLength());
-        System.out.println(stringLinkedList.remove(stringLinkedList.getLength()).getObj());
+//        System.out.println(stringLinkedList.remove(stringLinkedList.getLength()).getObj());
+        Optional<Node<String>> remove = Optional.ofNullable(stringLinkedList.remove(10));
+        remove.ifPresentOrElse(ele -> {
+            System.out.println(ele.getObj());
+        },() -> {
+            System.out.println("删除失败");
+        });
         System.out.println("length = " + stringLinkedList.getLength());
-        System.out.println(stringLinkedList.get(stringLinkedList.getLength()).getObj());
+    }
 
-//        System.out.println("length = " + stringLinkedList.getLength());
-//        System.out.println(stringLinkedList.remove("20"));
-//        System.out.println("length = " + stringLinkedList.getLength());
+    @Test
+    public void testRemoveByObj() {
+        for(int i = 0; i < 10; i++) {
+            stringLinkedList.add(i+"");
+        }
+
+        System.out.println("length = " + stringLinkedList.getLength());
+        Optional<Node<String>> stringNode = Optional.ofNullable(stringLinkedList.removeByObj("5"));
+        stringNode.ifPresentOrElse(ele -> {
+            System.out.println(ele.getObj());
+        }, () -> {
+            System.out.println("删除失败");
+        });
+        System.out.println("length = " + stringLinkedList.getLength());
     }
 
     @Test
@@ -78,14 +102,24 @@ public class LinkedListTest {
             stringLinkedList.add(i+"");
         }
 
-        System.out.println(stringLinkedList.modify(stringLinkedList.getLength(),"100"));
-        System.out.println(stringLinkedList.get(stringLinkedList.getLength()).getObj());
+//        System.out.println(stringLinkedList.modify(stringLinkedList.getLength(),"100"));
+        System.out.println(stringLinkedList.modify(1,"100"));
+
+        Node<String> next = stringLinkedList.getFirstNode();
+        while(next != null) {
+            System.out.println(next.getObj());
+            next = next.getNext();
+        }
     }
 
+    //TODO 缺少一些方法的测试
+
+    //TODO addSort有错误
     @Test
     public void TestAddSort() {
+        Random random = new Random(System.currentTimeMillis());
         for(int i = 9; i > 0; i--) {
-            stringLinkedList.addSort(i+"");
+            stringLinkedList.addSort(random.nextInt(100) + "");
         }
 
         Node<String> next = stringLinkedList.getFirstNode();

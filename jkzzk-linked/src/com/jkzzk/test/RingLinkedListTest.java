@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * 环形单项链表测试类
@@ -40,7 +41,7 @@ public class RingLinkedListTest {
             integerLinkedList.add(i);
         }
 
-        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.get(29));
+        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.get(10));
 
         integerNode.ifPresentOrElse(ele -> {
             System.out.println(ele.getObj());
@@ -64,7 +65,7 @@ public class RingLinkedListTest {
             integerLinkedList.add(i);
         }
 
-        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.remove(10));
+        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.remove(20));
 
         integerNode.ifPresentOrElse(ele -> {
             System.out.println("删除元素为：" + ele.getObj());
@@ -85,7 +86,7 @@ public class RingLinkedListTest {
             integerLinkedList.add(i);
         }
 
-        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.removeByObj(9));
+        Optional<Node<Integer>> integerNode = Optional.ofNullable(integerLinkedList.removeByObj(10));
 
         integerNode.ifPresentOrElse(ele -> {
             System.out.println("删除元素为：" + ele.getObj());
@@ -106,7 +107,7 @@ public class RingLinkedListTest {
             integerLinkedList.add(i);
         }
 
-        Optional<Integer> integerNode = Optional.ofNullable(integerLinkedList.modify(5,12));
+        Optional<Integer> integerNode = Optional.ofNullable(integerLinkedList.modify(10,12));
 
         integerNode.ifPresentOrElse(ele -> {
             System.out.println("修改元素为：" + ele);
@@ -148,7 +149,7 @@ public class RingLinkedListTest {
             integerLinkedList.add(i);
         }
 
-        if(!integerLinkedList.insertAfter(5,100)) {
+        if(!integerLinkedList.insertAfter(1,100)) {
             System.out.println("插入失败！！");
         }
 
@@ -161,11 +162,11 @@ public class RingLinkedListTest {
 
     @Test
     public void testInsertBefore() {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             integerLinkedList.add(i);
         }
 
-        if(!integerLinkedList.insertBefore(10,100)) {
+        if(!integerLinkedList.insertBefore(100,100)) {
             System.out.println("插入失败！！");
         }
 
@@ -193,8 +194,10 @@ public class RingLinkedListTest {
 
     @Test
     public void testAddSort() {
-        for (int i = 10; i > 0; i--) {
-            integerLinkedList.addSort(i);
+        Random random = new Random(System.currentTimeMillis());
+        for (int i = 0; i < 10; i++) {
+            integerLinkedList.addSort(random.nextInt(100) + 1);
+//            integerLinkedList.addSort(i);
         }
 
         Node<Integer> tmpNode = integerLinkedList.getFirstNode();

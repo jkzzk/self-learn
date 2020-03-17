@@ -1,7 +1,5 @@
 package com.jkzzk.linked;
 
-import java.util.Comparator;
-
 /**
  * 链表
  *      特点：有序可重复
@@ -143,7 +141,7 @@ public class LinkedList<T extends Comparable<T>> {
             return this.lastNode;
         }else {
             Node<T> tempNode = this.firstNode;
-            for(int i = 2; i < index; i++) {
+            for(int i = 1; i < index; i++) {
                 tempNode = tempNode.getNext();
             }
             return tempNode;

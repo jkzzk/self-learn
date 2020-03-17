@@ -112,11 +112,51 @@ public class LinkedListTest {
         }
     }
 
-    //TODO 缺少一些方法的测试
+    @Test
+    public void testReplace() {
+        for(int i = 0; i < 10; i++) {
+            stringLinkedList.add(i+"");
+        }
+
+        String replace = stringLinkedList.replace(10, new Node("100"));
+
+        Optional<String> replaceEle = Optional.ofNullable(replace);
+
+        replaceEle.ifPresentOrElse(ele -> {
+            System.out.println("替换元素为：" + ele);
+        }, () -> {
+            System.out.println("替换失败！！");
+        });
+
+        Node<String> next = stringLinkedList.getFirstNode();
+        while(next != null) {
+            System.out.println(next.getObj());
+            next = next.getNext();
+        }
+    }
+
+    @Test
+    public void testInsertAfter() {
+        for(int i = 0; i < 10; i++) {
+            stringLinkedList.add(i+"");
+        }
+
+        if(stringLinkedList.insertAfter(10,"100")) {
+            System.out.println("插入成功！");
+        }else {
+            System.out.println("插入失败！");
+        }
+
+        Node<String> next = stringLinkedList.getFirstNode();
+        while(next != null) {
+            System.out.println(next.getObj());
+            next = next.getNext();
+        }
+    }
 
     //TODO addSort有错误
     @Test
-    public void TestAddSort() {
+    public void testAddSort() {
         Random random = new Random(System.currentTimeMillis());
         for(int i = 9; i > 0; i--) {
             stringLinkedList.addSort(random.nextInt(100) + "");
